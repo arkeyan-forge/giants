@@ -1,7 +1,7 @@
 # XenonRecomp config for Skylanders: Giants (Xbox 360, title 415608DA).
 # Helper addresses from tools/sigmatch (all confidence 1.0); functions and switch tables from tools/find_switch_tables.py
 # (pass 1 without, pass 2 with the pass-1 mapping, merged). Paths are relative to this file laid out as the
-# kit does (config/Giants.toml, private/default.xex, ppc/): SSABuild builds that layout from the player's disc, and
+# kit does (config/Giants.toml, private/default.xex, ppc/): SkyBuild builds that layout from the player's disc, and
 # tools/prepare_game.sh does the same for the workshop. Output: ppc/ (private/giants/ppc in the workshop).
 # Giants has no C++ EH (no FuncInfo magic 0x1993052x in the image): only the SEH handler thunk precedes functions.
 [main]

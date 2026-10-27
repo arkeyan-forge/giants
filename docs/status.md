@@ -26,7 +26,7 @@ The user's disc stays outside git (`private/discs/` or the path in `GIANTS_ISO`)
 - **Voice language** (2026-10-26): the voices in any of the disc's 12 languages, whatever the text's (`voice_language`;
   [boot.md](boot.md#voice-language)).
 - **Pipelines**: a 2363-pipeline baseline from tours with several figures (2026-10-27; was 1575 from one SSA figure), compiled during the loading screens.
-- **Shaders** come from the disc, no dump: SSABuild extracts all 4394 from `/permanent/global.bld`; a short run at
+- **Shaders** come from the disc, no dump: SkyBuild extracts all 4394 from `/permanent/global.bld`; a short run at
   install adds Bink 2's 50 ([shaders.md](shaders.md)).
 - **Installs through Skylauncher** with kit 0.5.0 (macOS tested; "Installing Giants" below).
 - Feature by feature against SSA: [parity.md](parity.md); what is left: [100.md](100.md).
@@ -44,7 +44,7 @@ The user's disc stays outside git (`private/discs/` or the path in `GIANTS_ISO`)
   not test them; reaching them needs a save with the Heroic Challenges bought ("Challenge levels in the tour" below).
 - Giants on a real Windows PC and a real Linux PC (the kits build and start it in tests: Wine, a container); an icon on Windows and Linux (none today, the macOS bundle has the game's own).
 - Player 2 works with scripted presses; a real second pad is untried ([figures.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/host/figures.md), "Player 2").
-- `XMsgStartIORequest(0xFB, 0x000B0006)` is refused, about 2 per second; the `SSA_D3D_CAPTURE` log prints
+- `XMsgStartIORequest(0xFB, 0x000B0006)` is refused, about 2 per second; the `SKY_D3D_CAPTURE` log prints
   Resolve/DrawIndexed arguments with SSA's layout ([boot.md](boot.md)).
 - Real portals and a real LightCore with Giants; a full playthrough by people ([playtest.md](playtest.md)).
 
@@ -93,11 +93,11 @@ definitions (`Init_Setup.bld`) are the check, and the catalogue matches them (`t
 
 ## Installing Giants through Skylauncher (2026-10-25, kit 0.5.0) [Giants]
 A player drops the Giants disc, presses INSTALL, then PLAY, as for SSA. Design and contract: [kit contract](https://github.com/arkeyan-forge/forge/blob/main/docs/release/launcher/kit_contract.md) ("Several games in one kit").
-- **Disc detection**: SSABuild hashes `default.xex` (`12d1e29e...`) against `games/giants/game.txt` (the same hash as `info.cpp`; `make_kit.sh` checks that). Another disc: `@error` naming the SHA-256 and the supported games.
+- **Disc detection**: SkyBuild hashes `default.xex` (`12d1e29e...`) against `games/giants/game.txt` (the same hash as `info.cpp`; `make_kit.sh` checks that). Another disc: `@error` naming the SHA-256 and the supported games.
 - **Code**: `games/giants/config/Giants.toml` now uses the kit layout (`../private/default.xex`, `../ppc`). XenonRecomp gives the same `ppc_context.h` as for SSA; `ppc_config.h` differs (memory layout), so the kit holds one runtime per game (`lib/giants/runtime`, `commands/giants/`), `kit.txt` has `ppc_config_sha256.giants`.
-- **Shaders**: SSABuild extracts them itself (`tools/ssabuild/igz_shaders.cpp`: IGA v8, a small LZMA decoder, IGZ v6 scan; no Python): 4394 containers (264 vertex, 4130 pixel), the same count as `giants_extract.py`, in under a second. Then XenosRecomp, then the short headless run that dumps Bink 2's **50** shaders (9 s), the cache is rebuilt (4443 in the game: 4394 + 50 - 1 duplicate) and the game relinked.
+- **Shaders**: SkyBuild extracts them itself (`tools/skybuild/igz_shaders.cpp`: IGA v8, a small LZMA decoder, IGZ v6 scan; no Python): 4394 containers (264 vertex, 4130 pixel), the same count as `giants_extract.py`, in under a second. Then XenosRecomp, then the short headless run that dumps Bink 2's **50** shaders (9 s), the cache is rebuilt (4443 in the game: 4394 + 50 - 1 duplicate) and the game relinked.
 - **Names**: `SGRecomp` (`SGRecomp.app`, `SGRecomp.exe`); the log stays `SSARecomp.log` in `Skylanders/Giants/`. The CMake target is still `SSARecomp`: a `-DSSA_GAME=giants` build gives `build-giants/SSARecomp/SGRecomp(.app)`.
-- **Timing, M-series Mac, `--jobs 6`, kit 0.5.0** (SSABuild's `timing` log lines): toolchain 0 s, disc 0 s (extraction included), recompile 2 s, shaders 445 s, compile 37 s, link 0 s, movies 9 s, shaders again 462 s, compile 28 s, link 0 s: **986 s (16.4 min)**. The shader translation was 95 % of it and ran twice (the second run re-translated all 4443 for 50 new ones).
+- **Timing, M-series Mac, `--jobs 6`, kit 0.5.0** (SkyBuild's `timing` log lines): toolchain 0 s, disc 0 s (extraction included), recompile 2 s, shaders 445 s, compile 37 s, link 0 s, movies 9 s, shaders again 462 s, compile 28 s, link 0 s: **986 s (16.4 min)**. The shader translation was 95 % of it and ran twice (the second run re-translated all 4443 for 50 new ones).
   - **After the install-time work** (the install-time work, same Mac, same kit, the machine shared with other jobs, load average 10-70 on 8 cores, `--jobs 6`): before **977 s**, after **563 s**. Shaders 446 s then 450 s become 427 s then **56 s** (the second pass reloads 4443 translated shaders from `shaders/cache` and compiles the new ones). The first pass is bound by the Metal compiler (about 0.35 s of CPU per shader, 85 % of the translation), so it only drops on a quieter machine. Output: 4443 shaders compared, 0 differences (`tools/shaders/compare_cache.py`).
   - SSA, same conditions: 315 s before, 193 s after (shaders 100 s then 9 s).
   - The launcher shows `@progress` during both shader steps.
@@ -107,7 +107,7 @@ A player drops the Giants disc, presses INSTALL, then PLAY, as for SSA. Design a
 - **Game data copy** (2026-10-26, [game_data.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/host/game_data.md)): the whole disc copied and verified (988 files, 8.35 GB, 20 s on an SSD), then the game run isolated from the copy with **no disc image argument** for 60 s (3475 frames from the title, 30 fps limit).
 
 ## Level tour and pipeline baseline (2026-10-26) [Alchemy] [Giants]
-`tools/pipelines/tour_giants.sh <iso> <work>` runs every `level\*.arc` of the disc (91 runs; the three arena challenges once; `Title`, `ChallengeVO` and mesh packs excluded) in an isolated run: new game, `SSA_LEVEL=<name>` makes the tutorial's `.arc`/`.bld` read from that level, an SSA figure, 80 s of walking, attacking and the pause menu. Result: **78 levels reached and played to the end of the run, 12 crash, 1 stops** (below). The baseline went from 459 to **1575 pipelines** (`games/giants/pipelines/baseline.zst`, 26 KB, hashes and states only). Draw-time builds (pipelines not in the old 459 baseline) summed over the 91 runs: 9817 (each run starts with an empty `pipelines.bin`). After: level_203_the_machine 215 -> 2, level_008_islandtown 135 -> 2, challenge_level_020 34 -> 3.
+`tools/pipelines/tour_giants.sh <iso> <work>` runs every `level\*.arc` of the disc (91 runs; the three arena challenges once; `Title`, `ChallengeVO` and mesh packs excluded) in an isolated run: new game, `SKY_LEVEL=<name>` makes the tutorial's `.arc`/`.bld` read from that level, an SSA figure, 80 s of walking, attacking and the pause menu. Result: **78 levels reached and played to the end of the run, 12 crash, 1 stops** (below). The baseline went from 459 to **1575 pipelines** (`games/giants/pipelines/baseline.zst`, 26 KB, hashes and states only). Draw-time builds (pipelines not in the old 459 baseline) summed over the 91 runs: 9817 (each run starts with an empty `pipelines.bin`). After: level_203_the_machine 215 -> 2, level_008_islandtown 135 -> 2, challenge_level_020 34 -> 3.
 
 Loading wait: `OpenFile` waits for the pipeline list on every `\level\<name>.arc` open (the title and each level; `files.cpp`); the log has `[gpu] loading (<file>): ...` for each load.
 
@@ -208,7 +208,7 @@ Loading wait: `OpenFile` waits for the pipeline list on every `\level\<name>.arc
 **Crashes (12):** `arena_challenge_200_000` and 11 `challenge_level_*` (004, 018, 028, 032, 033, 034, 038, 048, 051, 053, 055). **Stops (1):** `challenge_level_014`. Both explained below: redirect artefacts.
 
 ### Challenge levels in the tour (2026-10-26) [Alchemy] [Giants]
-**Verdict: the 13 failures are artefacts of the `SSA_LEVEL` redirect, not runtime bugs.** A challenge level is not a
+**Verdict: the 13 failures are artefacts of the `SKY_LEVEL` redirect, not runtime bugs.** A challenge level is not a
 whole level: the game loads it on top of a shared **base mesh** (`level\challengeMesh_{000,002,006,034,ice,outdoor}.bld`)
 inside a challenge session. The redirect swaps the tutorial's `.arc`/`.bld` for the challenge's and nothing else, so the
 base mesh is never loaded (no floor is drawn: only the props, in black) and no challenge session exists.
@@ -253,7 +253,7 @@ actor's behaviour (`System - Show Heroic Challenge Select UI`, then `wait for he
 loaded; every `Level_Hub_2_Stage_*` has it) and by the challenge levels themselves (their end and failure screens), and
 challenges "unlock through store" (`StoreItem_HeroicChallenges`, Auric's shop in the hub).
 
-**The real flow was entered (2026-10-27, second pass) [V].** With the run steered from outside (`SSA_PRESS_FILE`,
+**The real flow was entered (2026-10-27, second pass) [V].** With the run steered from outside (`SKY_PRESS_FILE`,
 [`tools/regress/live_run.sh`](https://github.com/arkeyan-forge/forge/blob/main/tools/regress/live_run.sh): presses decided by looking at the game's frames, not by the clock)
 a new game started in `level_hub_2_stage_1` / `_2` (a figure with 65000 gold) reaches **Cali** on the upper deck (a Y icon over
 them; Y talks, and her lines end in the question **"Play a Heroic Challenge?"**), YES loads `misc\ui_heroicchallengeselect`
@@ -271,7 +271,7 @@ the real path needs the hub, Cali and the UI (about 2 minutes of presses per cha
 What would finish it: unlock all challenges (a save with the Heroic Challenges bought: Auric's store, or the unlock bits in a save), then
 repeat per challenge with `live_run.sh` (one UI "right" per challenge).
 
-**What was run in the first pass.** (1) Each of the six base meshes alone (`SSA_LEVEL=challengemesh_<suffix>`: the `.bld` opens, the missing `.arc`
+**What was run in the first pass.** (1) Each of the six base meshes alone (`SKY_LEVEL=challengemesh_<suffix>`: the `.bld` opens, the missing `.arc`
 is refused with 0xC0000034 and the game goes on; 034 has an `.arc` too): all six present frames for 90 s with **0 faults**,
 so their data (shaders, physics world, scripts) runs in our runtime. (2) The hub (`level_hub_2_stage_1`) with a figure
 holding 65000 gold: the deck, Auric's first-visit cutscene and dialogue and his shop's room were reached; the store, the

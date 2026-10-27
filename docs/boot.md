@@ -58,7 +58,7 @@ has 251 (SSA's 218 and Giants' 33: [kernel_exports.md](https://github.com/arkeya
 
 - **Shaders:** Alchemy never calls `D3DDevice_Create*Shader`: it builds the shader object itself (IGZ data) and calls
   `D3DVertexShader_Init`/`D3DPixelShader_Init` (`sub_822FCF40`, r3 object, r4 microcode in physical memory): our
-  shader hook is on the two Init functions. The shaders are inside the compressed archives; SSABuild now reads them
+  shader hook is on the two Init functions. The shaders are inside the compressed archives; SkyBuild now reads them
   from `/permanent/global.bld` ([shaders.md](shaders.md); the early "378 raw containers" were chance matches).
 - **Device layout:** aligning matched functions instruction by instruction, every device offset from ~0x2F58 up is
   **+0x80** in Giants (0x2F80→0x3000, 0x318C→0x320C, 0x3190→0x3210, 0x31A0→0x3220, 0x31E8→0x3268, 0x3260→0x32E0,
@@ -81,7 +81,7 @@ deadlock (below).
 
 ### First boot to the title screen (2026-10-25) [Giants] (unless marked)
 
-Run: `private/giants/scripts/run.sh` style (the test isolation variables (docs/getting-started/testing.md), `SSA_SKIP_MOVIES=1`). Result: the title
+Run: `private/giants/scripts/run.sh` style (the test isolation variables (docs/getting-started/testing.md), `SKY_SKIP_MOVIES=1`). Result: the title
 screen "Press A to begin" with its 3D scene and logo at 60 fps (78-96 draws, 12 resolves per frame, frame check: all
 three thirds of the 1280x720 image filled, ~7800 colours), then A gives the autosave notice and a save dialog. In order,
 what stood in the way:
@@ -91,7 +91,7 @@ what stood in the way:
    [Xbox] (any game)
 2. **`NtQueryDirectoryFile`** (crash after `[stub]`): Alchemy lists `\permanent\` at start. Implemented over the disc
    and host folders (`runtime/kernel/files.cpp`, `DiscFileSystem::List`). [Xbox]
-3. **Shaders:** the hooks on `D3DVertexShader_Init`/`D3DPixelShader_Init` dump 4338 containers (`SSA_DUMP_SHADERS`);
+3. **Shaders:** the hooks on `D3DVertexShader_Init`/`D3DPixelShader_Init` dump 4338 containers (`SKY_DUMP_SHADERS`);
    Alchemy strips their constant tables, so XenosRecomp now makes one up (float4 array `g_C`, samplers and booleans
    0-15): 4337 of 4338 translate (1 uses a 1D texture Metal has no heap for). SSA: 1118. The cache was then built
    from that dump (`SSA_GAME=giants tools/shaders/build_cache.sh <disc> <dump dir>`, ~15 min on an M1 Pro); since
@@ -103,7 +103,7 @@ what stood in the way:
    device+0x3344, rects at +0x3348); we see each draw once, so host targets of such a pass now cover all the tiles
    (`game::ExpandTiledTargets`, Giants only; SSA renders as before). [Xbox] (enabled per game)
 7. Movies: Bink 2 logos (`atvinewlogo_640.mov`, `tfb_logo_640x456.mov`) were not shown then (their 50 run-time shaders
-   were missing); `SSA_SKIP_MOVIES=1` makes them one frame long through a `BinkOpen` hook (`sub_821550A0`). [Giants]
+   were missing); `SKY_SKIP_MOVIES=1` makes them one frame long through a `BinkOpen` hook (`sub_821550A0`). [Giants]
    **Since 2026-10-26 they are drawn** (the shaders are recovered at install): [bink.md](https://github.com/arkeyan-forge/forge/blob/main/docs/engines/lux/bink.md), "Bink 2 in Giants".
 
 ## What broke on the way to a level
@@ -165,14 +165,14 @@ of the script's variables say what is on screen. Public facts: `tsapZ/GiantsReco
 - Classification (`ClassifyGiants`, unit-tested): `203_`, `301_ToyMissing` and `304_NeedsRemoval_Minion` ask for a figure (player 2
   when the state says ` P2`); `101_ 102_ 103_ 105_ 106_ 111_ 112_ 305_` are "too many / data" messages, not requests; `306_ConfirmPVP`
   is a question the game's buttons answer.
-- Run (`SSA_PORTAL=emulated`, `SSA_PORTAL_PLACE=` empty, a figure in the collection, the presses `a:20,a:30,...,a:130`,
-  `SSA_TOYBOX_SCRIPT="Return:100,..."`, `SSA_PORTAL_LOG=1`): `prompt for player 1`, `open`, Enter: `placed`, `P1: Jet-Vac`,
+- Run (`SKY_PORTAL=emulated`, `SKY_PORTAL_PLACE=` empty, a figure in the collection, the presses `a:20,a:30,...,a:130`,
+  `SKY_TOYBOX_SCRIPT="Return:100,..."`, `SKY_PORTAL_LOG=1`): `prompt for player 1`, `open`, Enter: `placed`, `P1: Jet-Vac`,
   `the prompt is gone`, `closed`, `the game took Jet-Vac (slot 0, 0.1 s after the change)`.
 - [?] the player 2 prompt, "too many toys" opening nothing, and a pause-menu false positive were not run; the states for
   them are in tsapZ's measurements.
 
 ### Text language [Alchemy] [Giants] [V] (2026-10-27)
-`--language` / `language` / `SSA_LANGUAGE` picks the text (and, with no `voice_language`, the voices and the movie tracks) in any of
+`--language` / `language` / `SKY_LANGUAGE` picks the text (and, with no `voice_language`, the voices and the movie tracks) in any of
 the disc's twelve languages: `en fr de es es-419 it nl pt sv no da fi` (`games/giants/language.cpp`, `giants::SetTextLanguage`).
 
 **Why only some worked** [V]: `sub_8217F2D8` (the app's set-up) takes the console language (`sub_8223C248` calls `sub_82297910`,
@@ -195,7 +195,7 @@ The packs hold those lines (`permanent/global.bld`: "Druk", "Tryck", "Trykk", "P
 `no`, `da`, `fi`, `it` were run (the hook logs their values 17, 4, 7, 14) and not looked at on screen.
 
 ### Voice language [Alchemy] [Giants] [V] (2026-10-26)
-The setting `voice_language` (`--voice-language`, `SSA_VOICE_LANGUAGE`; unset = the text's language, as the game does)
+The setting `voice_language` (`--voice-language`, `SKY_VOICE_LANGUAGE`; unset = the text's language, as the game does)
 plays the voices in another language than the text, like SSA's (`games/giants/language.cpp`).
 
 **What the disc holds** [V]: twelve voice languages, the same as its text languages: English, French, German, Spanish,
@@ -230,7 +230,7 @@ voice language's track id in the movie's description (+40, when its mode +100 is
 Log: `[language] voices fr: permanent/bootstrap.bld:/FRENCH.pak loaded before permanent/bootstrap.bld:/ENGLISH.pak` and
 `[language] movie voice track 9 (fr)`. Cost: one more pack per archive (about 150 KB each).
 
-**Proof** (2026-10-26, isolated runs from the title to the tutorial, `SSA_TRACE_FILES=1`, `SSA_AUDIO_DUMP`):
+**Proof** (2026-10-26, isolated runs from the title to the tutorial, `SKY_TRACE_FILES=1`, `SKY_AUDIO_DUMP`):
 | Run | Subtitles | Streams read from `level_213_tutotial.arc` | Eon's line `vo_eon_lvl213_003` in the audio dump |
 |---|---|---|---|
 | `--voice-language fr` | English ("This was a dark time for...") | `npc_audio/eon/french/vo_eon_lvl213_002b, 003, 004, 017a, 038, ...` | French version r = 0.84 (51.8 s), English 0.08 |
@@ -251,6 +251,6 @@ challenge session by the redirect, not runtime bugs ([status.md](status.md), "Ch
 - Challenge levels through the game's own path (a save with the Heroic Challenges bought): the tour's redirect cannot
   start them properly ([status.md](status.md), "Challenge levels in the tour").
 - `XMsgStartIORequest(0xFB, 0x000B0006)` (XUserSetContext in Xenia's XGI app) is refused, about 2 per second.
-- The `SSA_D3D_CAPTURE` debug log still prints Resolve/DrawIndexed arguments with SSA's layout.
+- The `SKY_D3D_CAPTURE` debug log still prints Resolve/DrawIndexed arguments with SSA's layout.
 - The portal prompt for player 2, "too many toys" and a pause-menu false positive were not run [?].
 - Fixed since: Bink 2 movies (drawn, 2026-10-26), Giants figures and LightCore (2026-10-26).

@@ -2,7 +2,7 @@
 
 > **Purpose:** where Giants' shaders are on the disc, the Alchemy formats that hold them, and how the kit builds the cache · **Status:** current (2026-10-26) · **Tags:** [Alchemy] [Giants]
 
-Goal (done, kit 0.5.0): a player's SSABuild builds the Giants shader cache from the disc alone, with no `SSA_DUMP_SHADERS` run through the
+Goal (done, kit 0.5.0): a player's SkyBuild builds the Giants shader cache from the disc alone, with no `SKY_DUMP_SHADERS` run through the
 game. Tool: `tools/shaders/giants_extract.py` (Python standard library only, `python3 -I`). Everything it writes goes
 to `private/` (derived from the disc, never committed).
 
@@ -18,7 +18,7 @@ pixel). None of the other 890 archives (`.arc` and `.bld`, levels, characters, m
 Not on the disc: 50 containers that Bink 2 builds when it opens a movie (see "Bink" below).
 
 ### Format facts [Alchemy] [V] (reverse-engineered from the disc)
-The engine's formats, cited by `runtime/host/art/alchemy_archive.*` and `tools/ssabuild/igz_shaders.*`.
+The engine's formats, cited by `runtime/host/art/alchemy_archive.*` and `tools/skybuild/igz_shaders.*`.
 
 #### IGA v8 (little-endian), the `.arc` and `.bld` files
 ```
@@ -32,8 +32,8 @@ The engine's formats, cited by `runtime/host/art/alchemy_archive.*` and `tools/s
   rest of the file). The archive also has a chunk table after the entries (offsets in 0x100 units, bit 15 or 31 =
   compressed); reading chunks one after the other makes it unnecessary.
 - The name table (`u32 offsets[n]`, then NUL-terminated source paths; [art.md](art.md#iga-v8-name-table)) is not needed
-  here: shaders are found by content. The reader (IGA, LZMA) is `runtime/host/art/alchemy_archive.cpp`, shared by SSABuild
-  (`tools/ssabuild/igz_shaders.cpp`), the game and Skylauncher.
+  here: shaders are found by content. The reader (IGA, LZMA) is `runtime/host/art/alchemy_archive.cpp`, shared by SkyBuild
+  (`tools/skybuild/igz_shaders.cpp`), the game and Skylauncher.
 
 #### IGZ v6 (big-endian), the objects inside
 ```
@@ -81,12 +81,12 @@ level archive: the global archive is the only source, and it is loaded at boot.
 Bink 2 builds its movie shaders in code: the 0x20-byte-aligned microcode is in `default.xex` (all 50 physical parts are
 found whole in the loaded image), but the virtual part is a D3D header assembled at run time from a compiled-in Microsoft
 shader blob (its fields are patched: sizes, offsets, the constant table). That part is not a byte string of the image.
-**Done: the short run** (as for SSA's Bink shaders): after SSABuild builds the game, it runs it headless with
-`SSA_DUMP_SHADERS=<dir>` until the first Bink logo opens (9 s), rebuilds the cache with the 50 and relinks
+**Done: the short run** (as for SSA's Bink shaders): after SkyBuild builds the game, it runs it headless with
+`SKY_DUMP_SHADERS=<dir>` until the first Bink logo opens (9 s), rebuilds the cache with the 50 and relinks
 ([status.md](status.md), "Installing Giants"). Not done: shipping the 50 as a recipe (it needs Bink's assembler, the
 `BinkOpen` path, understood).
 
-### What SSABuild does for Giants (C++, `tools/ssabuild/igz_shaders.cpp`, no Python)
+### What SkyBuild does for Giants (C++, `tools/skybuild/igz_shaders.cpp`, no Python)
 1. Extract the XEX and translate the code (XenonRecomp), as for SSA.
 2. Read `/permanent/global.bld` (`shaders=igz:/permanent/global.bld` in `games/giants/game.txt`): 4394 containers, the
    same as `giants_extract.py`, in under a second (the Python tool takes 48 s for the whole disc, 2 s for that file).
@@ -97,14 +97,14 @@ shader blob (its fields are patched: sizes, offsets, the constant table). That p
 ## Tests
 2026-10-25:
 Cache from the extractor's 4394 files only (XenosRecomp, no runtime dump, `[gpu] shader cache: 4394 shaders`), game
-built in `build-giants`, offscreen isolated boot of 75 s with `SSA_SKIP_MOVIES=1`: reaches the title scene at 60 fps, 58
+built in `build-giants`, offscreen isolated boot of 75 s with `SKY_SKIP_MOVIES=1`: reaches the title scene at 60 fps, 58
 draws per frame. Shaders missing at draw time: **10 distinct, all pixel shaders and all among the 50 Bink ones**;
 none from the engine's own data. Since kit 0.5.0 the 50 are in the cache too: `[gpu] shader cache: 4443 shaders` (4394 +
 50 - 1 duplicate), the title scene at 60 fps ([status.md](status.md), "Installing Giants").
 
 2026-10-27 (SSA polish, a 1-hour soak with the cache of the kit): the run logs one more missing pixel shader, **`95CAD664E1351A05`**, which
 is **not among the 4394 of `global.bld`** (all 4394 translate: 0 skipped) and not in the cache's 50: a run-time container (with the
-dump of a run at `SSA_DUMP_SHADERS`, 48 containers are not on the disc list). XenosRecomp rejects it: 3 `tfetch2D` and one `tfetch1D`, and the
+dump of a run at `SKY_DUMP_SHADERS`, 48 containers are not on the disc list). XenosRecomp rejects it: 3 `tfetch2D` and one `tfetch1D`, and the
 translator has no 1D texture (`TEXTURE_DIMENSIONS` is 2D, 3D, cube). Supporting it takes both sides: the translator (a 1D fetch as a 2D one at
 v = 0.5) and the runtime (guest 1D textures: `TextureForUntimed` returns no texture for dimension 0). Open; no visible effect was noted in the
 runs (the draw is a rect list seen once, at boot).
@@ -113,7 +113,7 @@ runs (the draw is a rect list seen once, at boot).
 (`patches/xenosrecomp.patch`: dimension "2D", `float2(u, 0.5)`, the offset on u only), and the runtime binds a guest 1D
 texture like a 2D one (`TextureFor`, `d3d/render.cpp`: only 3D textures are refused now; the fetch constant's height is 1).
 The cache has `95CAD664E1351A05` (4443 shaders + it), the pipeline is built at draw time (0.2 ms) and the draw is no longer skipped.
-**Where it is used:** `SSA_LOG_SHADER=95CAD664E1351A05` says once where a pixel shader is first drawn: here at frame 921 of a
+**Where it is used:** `SKY_LOG_SHADER=95CAD664E1351A05` says once where a pixel shader is first drawn: here at frame 921 of a
 run from the title, as the tutorial's first scene appears (Eon's intro, offscreen shots show the painted scene and the dialogue
 box, nothing visibly wrong), primitive 6 (a strip), vertex shader `51AA1C15D50798F3`, into a 2000x1200 target (the scene or a
 full-screen pass, scale 2). Seen once; its look cannot be compared with a console, so "draws" is [V], "draws right" is [?].

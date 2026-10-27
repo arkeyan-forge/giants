@@ -1,4 +1,4 @@
-# What the player kit's SSABuild knows about this game (tools/make_kit.sh copies it to config/giants/game.txt). No game data:
+# What the player kit's SkyBuild knows about this game (tools/make_kit.sh copies it to config/giants/game.txt). No game data:
 # the hashes identify the player's own default.xex and must be the ones games/giants/info.cpp accepts.
 id=giants
 name=Skylanders: Giants
@@ -8,5 +8,5 @@ runtime=SGRecomp
 version=0.8.0
 toml=Giants.toml
 xex_sha256=12d1e29e4f07fbc559bc1a4988dd6bf346c3d16e30cbf862e2683e862f9fc09e
-# Shaders: all in one IGA archive of the disc (SSABuild extracts them itself: tools/ssabuild/igz_shaders.cpp).
+# Shaders: all in one IGA archive of the disc (SkyBuild extracts them itself: tools/skybuild/igz_shaders.cpp).
 shaders=igz:/permanent/global.bld

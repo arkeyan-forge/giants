@@ -166,7 +166,7 @@ namespace
     // The two start-up logos (\movies\atvinewlogo_640.mov, \movies\tfb_logo_640x456.mov); the story movies are fmv01..12.
     constexpr std::string_view IntroMovies[] = { "atvinewlogo_640", "tfb_logo_640x456" };
 
-    // SSA_LEVEL: the first level is the tutorial, level\level_213_tutotial.arc and .bld (and that path alone).
+    // SKY_LEVEL: the first level is the tutorial, level\level_213_tutotial.arc and .bld (and that path alone).
     const game::Adapter g_adapter = { g_gameInfo, ReadPortalPrompt, true, giants::SetVoiceLanguage, GlyphTextures, IntroMovies, true,
         giants::SetTextLanguage, { "\\level\\level_213_tutotial", std::string_view("\0.", 2) } };
 }
