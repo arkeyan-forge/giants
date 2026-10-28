@@ -103,17 +103,21 @@ Pixels are tiled as every Xenos texture (Xenia's `Tiled2D`, 32-block rows), 16-b
 
 ## Button pictures (glyphs) [Alchemy] [Giants] [V]
 Every picture of a pad button found (2026-10-27: texture dumps of the title, the tutorial and levels, a static scan of the
-64x64 pictures of every archive, the name tables of all 85,349 entries). Replaced for each glyph style
+64x64 pictures of every archive, the name tables of all 85,349 entries; 2026-10-28: every picture of every archive, by the
+renderer's hash). Replaced for each glyph style
 ([input.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/xbox360/input.md), "Glyphs"):
 
 | Picture | Where | Status |
 |---|---|---|
 | Buttons in the prompts' fonts (A, X, Y, B, LS, RS, START, BACK) | atlases `AD2E31ADEC576354` (512), `462EB82E5F1D8851` (1024), cells in `adapter.cpp` | replaced |
 | Green A of "Press A to begin" | `F4C85169D542FC77`, 64x64, in `level/Title.bld` | replaced |
-| Gold Y coin over the tutorial's rock (world prompt, shown with a Giant on the portal) | `E88F26B298A077B7`, 64x64 DXT5, stored upside down | replaced (found by the dump when it appeared; not in `.arc`/`.bld` name tables, which hold no texture names for in-level pictures) |
+| Small gold Y coin over the tutorial's rock (`models/ui/buttonicons/360/textures/wii_c.png`, model `ButtonIcons_wii_c`, the dialogue actor's button; shown with a Giant on the portal) | `E88F26B298A077B7`, 64x64 DXT1 with mips, stored upside down; in `permanent/global.bld` and 18 PvP levels, all copies identical | replaced |
+| **Large gold Y coin of the "Mash!" prompt** (the Giant lifts the rock: Y to mash; `models/ui/buttonicons_ui/360/textures/wii_c.png`, model `ButtonIcons_HD_360`, driven by `UI_Controller_Prompt.ai`, which 79 levels include: the tutorials 213/214, 200-212, 215, the challenges, arenas and PvP) | `6DE08CB96DD4DD23`, 128x128 DXT1 with mips, stored upside down, `permanent/global.bld` | replaced (2026-10-28): the Y the user still saw on the keyboard in 0.6.0; shot before/after |
+| Large green A coin of the same model | `7FAE9AE5883D1AB9`, 128x128 DXT1, upside down, `permanent/global.bld` | replaced; drawn in the tutorial run (`a_coin 128 drawn as keyboard`) |
+| White RT keycap of the giant robot's HUD (`ui_main/sprites/robot/triggerr_360.png`, `Level_209_GiantRobot.bld`) | `179828095390F2C2`, 86x85 DXT5, upside down | in `GlyphTextures`; [?] not seen in game, and its hash assumes a tiled pitch of 32 blocks (the width is not a power of two) |
 | Wii buttons atlas | `1F11BD3F9CB5136B` | never shown on the 360; left |
 | `controls_360.png` / `controls_ps3.png` / `controls_wii.png` (`levels/includes/ui_main/sprites/controls/sky2`, in the options screen and every challenge level's archive) | whole-controller diagrams with labelled lines | not replaced: a diagram of one pad, not a button; [?] only seen in the archive names |
-| Other world coins (A, B, X) | none seen: the static scan of the 64x64 pictures (466 distinct, contact sheet) has no coin besides Y (runtime) and the title's A | [?] if another level shows one, its hash goes in `GlyphTextures` |
+| Other world coins (B, X), mash prompts | none: the 2026-10-28 scan hashed every picture of the 891 `.arc`/`.bld` archives (58,394 pictures, 954 names, the renderer's hash: it gives back every known one) and found no other button picture; the PS3 RT (`49F639E1E7D89C8D`) and the Wii remote's textures are never drawn on the 360 | done [V] for the disc; the letters are never geometry |
 
 ## How we extract it
 The provider in `runtime/host/art/` (shared with Skylauncher and the Toy Box) reads the archives above with

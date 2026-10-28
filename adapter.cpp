@@ -159,8 +159,15 @@ namespace
         { 0x462EB82E5F1D8851ull, "font atlas 1024", Glyph::A, LargeFontCells },
         { 0xF4C85169D542FC77ull, "a_button 64", Glyph::A, {}, true }, // 64x64 DXT5, a whole green A ("Press A to
                                                                           // begin"), stored upside down
-        { 0xE88F26B298A077B7ull, "y_coin 64", Glyph::Y, {}, true }, // 64x64 DXT5, the gold Y coin above a rock to smash (a world
-                                                                   // prompt), stored upside down
+        { 0xE88F26B298A077B7ull, "y_coin 64", Glyph::Y, {}, true }, // 64x64 DXT1, the gold Y coin of the dialogue button's
+                                                                   // model (ButtonIcons_wii_c), stored upside down
+        // The world prompts' coins (model ButtonIcons_HD_360, driven by UI_Controller_Prompt.ai: "press Y" above a rock to
+        // smash with a Giant, in the first levels): 128x128 DXT1, stored upside down, in permanent\global.bld.
+        { 0x6DE08CB96DD4DD23ull, "y_coin 128", Glyph::Y, {}, true },
+        { 0x7FAE9AE5883D1AB9ull, "a_coin 128", Glyph::A, {}, true },
+        // A white RT keycap of the giant robot's HUD (ui_main\sprites\robot\triggerr_360, 86x85 DXT5, upside down), in
+        // Level_209_GiantRobot.bld only; its hash assumes the tiled pitch of 32 blocks, not seen in game yet.
+        { 0x179828095390F2C2ull, "rt 86x85", Glyph::RightTrigger, {}, true },
     };
 
     // The two start-up logos (\movies\atvinewlogo_640.mov, \movies\tfb_logo_640x456.mov); the story movies are fmv01..12.
