@@ -42,6 +42,11 @@
 #define GAME_HOOK_Ultrawide_SceneTargets sub_82196150
 #define GAME_HOOK_Ultrawide_ScenePasses sub_8219EC20
 
+// LZMA (engines/alchemy/lzma.cpp): the LZMA SDK's LzmaDec_DecodeReal (9.x), the inner loop of every archive chunk's
+// decode, found by its constants (kTopValue lis 256, the literal table at probs + 3692 bytes, kMatchSpecLenStart 274);
+// the same code, byte for byte in its asm, in Giants and Swap Force.
+#define GAME_HOOK_LzmaDec_DecodeReal sub_822BBA60
+
 // Bink 2 (runtime/d3d/bink_display.cpp): BinkOpen calls the header reader sub_82153BE8 (tsapZ/GiantsRecomp: 0x82153DB0).
 #define GAME_HOOK_BinkOpen sub_821550A0
 #define GAME_HOOK_BinkClose sub_82155B08 // tsapZ/GiantsRecomp: 0x82155B08; sets HBINK+76, then frees

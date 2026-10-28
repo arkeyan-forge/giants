@@ -1,6 +1,6 @@
 # Skylanders: Giants (giants)
 
-> **Purpose:** which disc Giants needs, where the port stands, where to start, and the dated news of the port · **Status:** current (2026-10-27) · **Tags:** [Giants] [Alchemy]
+> **Purpose:** which disc Giants needs, where the port stands, where to start, and the dated news of the port · **Status:** current (2026-10-28) · **Tags:** [Giants] [Alchemy]
 
 ## Disc
 | | |
@@ -66,6 +66,14 @@ built 17-145 per level at 20-67 ms each, cold): the baseline now comes from tour
 Giants characters (1575 -> 2363); a figure no tour used builds 1-6 per level (was 23-102), and a new player's first
 `level_203` with it has no frame over 40 ms after the first. Numbers: [renderer_threads.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/gpu/renderer_threads.md),
 "Giants (2026-10-27)".
+
+**2026-10-28** [V]: the archives' **LZMA decoding runs as host code** (the LZMA SDK's `LzmaDec_DecodeReal`,
+`sub_822BBA60`, [lzma.md](https://github.com/arkeyan-forge/forge/blob/main/docs/engines/alchemy/lzma.md); 131 072 calls checked against the translated one, 0
+differences): 201 MB from start-up to Chapter 1 decode in 5.3-5.7 s of the workers' time instead of 9.5-11.0 s; the
+level load from `level_213_tutotial.arc` to the level **1.7-2.3 -> 1.0-1.2 s**; in the level (the game streams) the
+process's CPU per frame 17.7-18.1 -> 15.1-15.8 ms at 30 fps, work p99 17-18 -> 12-15 ms. The ~4 s before the `.arc`
+(save, fade) are the game's own timing. Every optimization and which game has it: [renderer_threads.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/gpu/renderer_threads.md),
+"Optimizations per game".
 
 ## Figures, LightCore and the portal light (2026-10-26) [Giants] [V]
 Giants plays with every toy type it supports, emulated (a real portal gets the same commands, untried with hardware).
