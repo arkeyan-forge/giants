@@ -295,3 +295,8 @@ opened from the hub (`System - Show Heroic Challenge Select UI`); the pause menu
 Flynn's Ship and Main Menu. A save with them bought, or the select menu's own load request, would test the real path; the
 tour does not have one. Starting the base mesh through another package request of the start-up (tried: the empty
 `character\.bld` request) loads it during the title, and its world goes with the title's.
+
+## Difficulty (2026-10-28) [Giants] [V]
+A new game's difficulty screen has three choices (Easy, "Cyclops Crusher (Medium)" the default, "Heavy Hitter (Hard)"), all open on a
+new save: Giants has no locked difficulty and no Nightmare, so `nightmare_from_start` does nothing here (the runtime says so in the
+log). Swap Force's Nightmare is the one that is locked: [its status](https://github.com/arkeyan-forge/swap-force/blob/main/docs/status.md), "Nightmare difficulty".
