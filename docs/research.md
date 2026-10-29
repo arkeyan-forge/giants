@@ -73,7 +73,7 @@ The other ports and tools: [prior_art.md](https://github.com/arkeyan-forge/forge
 - [V] Title ID `415608DA`, media ID `52FFE94B` (`games/giants/info.cpp`).
 - [V] The engine is **Alchemy**, not Lux (the [inf] "Lux expected" was wrong; Wikipedia was right).
 - [V] The portal protocol: Giants sends only `C r g b` (no `J L M V`); LightCore figures are ordinary figures that glow
-  ([status.md](status.md), "Figures").
+  ([history.md](history.md), "Figures").
 - [V] The tag format: a second pair of areas holds Giants' experience (level 15) and the hat
   ([figures.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/host/figures.md), "Giants' additions").
 - [V] Giants accepts SSA toys and Giants toys (every toy type run to Chapter 1).

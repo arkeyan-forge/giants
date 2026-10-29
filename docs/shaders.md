@@ -83,7 +83,7 @@ found whole in the loaded image), but the virtual part is a D3D header assembled
 shader blob (its fields are patched: sizes, offsets, the constant table). That part is not a byte string of the image.
 **Done: the short run** (as for SSA's Bink shaders): after SkyBuild builds the game, it runs it headless with
 `SKY_DUMP_SHADERS=<dir>` until the first Bink logo opens (9 s), rebuilds the cache with the 50 and relinks
-([status.md](status.md), "Installing Giants"). Not done: shipping the 50 as a recipe (it needs Bink's assembler, the
+([history.md](history.md), "Installing Giants"). Not done: shipping the 50 as a recipe (it needs Bink's assembler, the
 `BinkOpen` path, understood).
 
 ### What SkyBuild does for Giants (C++, `tools/skybuild/igz_shaders.cpp`, no Python)
@@ -100,7 +100,7 @@ Cache from the extractor's 4394 files only (XenosRecomp, no runtime dump, `[gpu]
 built in `build-giants`, offscreen isolated boot of 75 s with `SKY_SKIP_MOVIES=1`: reaches the title scene at 60 fps, 58
 draws per frame. Shaders missing at draw time: **10 distinct, all pixel shaders and all among the 50 Bink ones**;
 none from the engine's own data. Since kit 0.5.0 the 50 are in the cache too: `[gpu] shader cache: 4443 shaders` (4394 +
-50 - 1 duplicate), the title scene at 60 fps ([status.md](status.md), "Installing Giants").
+50 - 1 duplicate), the title scene at 60 fps ([history.md](history.md), "Installing Giants").
 
 2026-10-27 (SSA polish, a 1-hour soak with the cache of the kit): the run logs one more missing pixel shader, **`95CAD664E1351A05`**, which
 is **not among the 4394 of `global.bld`** (all 4394 translate: 0 skipped) and not in the cache's 50: a run-time container (with the

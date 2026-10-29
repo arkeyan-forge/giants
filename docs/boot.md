@@ -131,7 +131,7 @@ emulated portal), music and voices playing, 60 fps. In order:
    before. 0 rejected pipelines (7 before).
 5. **Pipeline baseline** [Giants]: `games/giants/pipelines/baseline.zst` (459 pipelines, two runs); draw-time builds on
    the same path 433 -> 5. Since 2026-10-26 the 91-level tour gives **1575** pipelines, waited for at every level
-   load ([status.md](status.md), "Level tour"); since 2026-10-27 tours with other figures make it **2363**
+   load ([history.md](history.md), "Level tour"); since 2026-10-27 tours with other figures make it **2363**
    ([pipeline_cache.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/gpu/pipeline_cache.md), "Giants").
 
 ### Choppy, metallic sound (2026-10-25) [Xbox] (any title; seen in Giants)
@@ -245,11 +245,11 @@ whatever the language, with or without the hook (the Danish copy of that line; n
 ### Levels past Chapter 1
 The level tour (2026-10-26, `tools/pipelines/tour_giants.sh`) loads every level of the disc: 78 of 91 play, 12 crash
 (`Fault at guest address 0x78` in `sub_82246390`) and 1 stops: all challenge levels started without their base mesh and
-challenge session by the redirect, not runtime bugs ([status.md](status.md), "Challenge levels in the tour").
+challenge session by the redirect, not runtime bugs ([history.md](history.md), "Challenge levels in the tour").
 
 ## Still open
 - Challenge levels through the game's own path (a save with the Heroic Challenges bought): the tour's redirect cannot
-  start them properly ([status.md](status.md), "Challenge levels in the tour").
+  start them properly ([history.md](history.md), "Challenge levels in the tour").
 - `XMsgStartIORequest(0xFB, 0x000B0006)` (XUserSetContext in Xenia's XGI app) is refused, about 2 per second.
 - The `SKY_D3D_CAPTURE` debug log still prints Resolve/DrawIndexed arguments with SSA's layout.
 - The portal prompt for player 2, "too many toys" and a pause-menu false positive were not run [?].
