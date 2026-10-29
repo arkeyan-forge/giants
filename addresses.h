@@ -61,7 +61,6 @@
 #define GAME_HOOK_Language_Region sub_8217F2D8
 #define GAME_HOOK_Movie_Open sub_823344B0
 
-
 #include <cstdint>
 
 namespace game

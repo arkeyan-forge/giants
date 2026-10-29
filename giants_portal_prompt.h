@@ -15,7 +15,8 @@
 //   Idle P1 Only" at player 1's prompt, "... Idle P2 Only" at player 2's, "Portal Control - In Game - 0 - Idle" in play.
 namespace portalprompt
 {
-    constexpr uint32_t GiantsScriptReferenceVtable = 0x820DF750, GiantsStringInfoVtable = 0x820DD548, GiantsStateVtable = 0x820DFE40;
+    constexpr uint32_t GiantsScriptReferenceVtable = 0x820DF750, GiantsStringInfoVtable = 0x820DD548,
+                       GiantsStateVtable = 0x820DFE40;
     constexpr uint32_t GiantsNameOffset = 8, GiantsValueOffset = 0x1C;
     constexpr std::string_view GiantsErrorVariable = "portal error string", GiantsStateVariable = "current state name";
     constexpr std::string_view GiantsPortalStatePrefix = "Portal Control - ";

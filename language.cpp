@@ -24,18 +24,27 @@ namespace
     {
         std::string_view code;
         std::string_view pack; // the language pack's name, IG_CORE_LANGUAGE_<pack>
-        uint32_t index;        // its IG_CORE_LANGUAGE value (the story movies' voice track is index + 1)
+        uint32_t index; // its IG_CORE_LANGUAGE value (the story movies' voice track is index + 1)
     };
 
     // The twelve voice languages on the disc (every level's language packs and story movies have them all).
     constexpr VoiceLanguage VoiceLanguages[] = {
-        { "en", "ENGLISH", 6 }, { "fr", "FRENCH", 8 }, { "de", "GERMAN", 9 }, { "es", "SPANISH", 21 },
-        { "es-419", "HISPANIC", 0 }, { "it", "ITALIAN", 14 }, { "nl", "DUTCH", 5 }, { "pt", "PORTUGUESE", 19 },
-        { "sv", "SWEDISH", 22 }, { "no", "NORWEGIAN", 17 }, { "da", "DANISH", 4 }, { "fi", "FINNISH", 7 },
+        { "en", "ENGLISH", 6 },
+        { "fr", "FRENCH", 8 },
+        { "de", "GERMAN", 9 },
+        { "es", "SPANISH", 21 },
+        { "es-419", "HISPANIC", 0 },
+        { "it", "ITALIAN", 14 },
+        { "nl", "DUTCH", 5 },
+        { "pt", "PORTUGUESE", 19 },
+        { "sv", "SWEDISH", 22 },
+        { "no", "NORWEGIAN", 17 },
+        { "da", "DANISH", 4 },
+        { "fi", "FINNISH", 7 },
     };
 
     const VoiceLanguage* g_voices = nullptr; // nullptr: the game's own (the text language)
-    const VoiceLanguage* g_text = nullptr;   // nullptr: the console language's, as the region allows it
+    const VoiceLanguage* g_text = nullptr; // nullptr: the console language's, as the region allows it
 
     uint32_t AppLanguage()
     {
@@ -105,11 +114,12 @@ PPC_FUNC(GAME_HOOK(Language_LoadPack))
     char* path = static_cast<char*>(g_memory.Translate(ctx.r4.u32));
     std::string original(path, strnlen(path, 1024));
     size_t slash = original.rfind('/');
-    std::string_view pack = slash == std::string::npos ? std::string_view() : std::string_view(original).substr(slash + 1);
+    std::string_view pack =
+        slash == std::string::npos ? std::string_view() : std::string_view(original).substr(slash + 1);
     bool otherLanguage = false;
     for (const VoiceLanguage& language : VoiceLanguages)
-        otherLanguage |= pack.size() == language.pack.size() + 4 && pack.starts_with(language.pack) && pack.ends_with(".pak")
-            && language.pack != g_voices->pack;
+        otherLanguage |= pack.size() == language.pack.size() + 4 && pack.starts_with(language.pack) &&
+                         pack.ends_with(".pak") && language.pack != g_voices->pack;
     if (!otherLanguage)
     {
         GAME_IMP(Language_LoadPack)(ctx, base);
@@ -125,8 +135,8 @@ PPC_FUNC(GAME_HOOK(Language_LoadPack))
     static bool logged = false;
     if (!logged)
     {
-        fprintf(stderr, "[language] voices %s: %s loaded before %s\n", std::string(g_voices->code).c_str(), voices.c_str(),
-            original.c_str());
+        fprintf(stderr, "[language] voices %s: %s loaded before %s\n", std::string(g_voices->code).c_str(),
+            voices.c_str(), original.c_str());
         logged = true;
     }
     memcpy(path, original.c_str(), original.size() + 1);
@@ -143,11 +153,12 @@ PPC_FUNC_IMPL(GAME_IMP(Movie_Open));
 PPC_FUNC(GAME_HOOK(Movie_Open))
 {
     uint32_t description = g_memory.Read<uint32_t>(ctx.r3.u32 + 28);
-    if (g_voices != nullptr && description != 0 && g_memory.Read<uint32_t>(description + 100) == 0
-        && g_memory.Read<uint32_t>(description + 40) == AppLanguage() + 1)
+    if (g_voices != nullptr && description != 0 && g_memory.Read<uint32_t>(description + 100) == 0 &&
+        g_memory.Read<uint32_t>(description + 40) == AppLanguage() + 1)
     {
         g_memory.Write<uint32_t>(description + 40, g_voices->index + 1);
-        fprintf(stderr, "[language] movie voice track %u (%s)\n", g_voices->index + 1, std::string(g_voices->code).c_str());
+        fprintf(
+            stderr, "[language] movie voice track %u (%s)\n", g_voices->index + 1, std::string(g_voices->code).c_str());
     }
     GAME_IMP(Movie_Open)(ctx, base);
 }

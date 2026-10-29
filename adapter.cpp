@@ -49,7 +49,10 @@ namespace
     }
 
     // The name of what the script variable at `variable` holds, if that is of class `vtable`.
-    std::string ValueName(uint32_t variable, uint32_t vtable) { return NameOf(Word(variable + GiantsValueOffset), vtable); }
+    std::string ValueName(uint32_t variable, uint32_t vtable)
+    {
+        return NameOf(Word(variable + GiantsValueOffset), vtable);
+    }
 
     bool IsVariable(uint32_t object, std::string_view name)
     {
@@ -58,7 +61,8 @@ namespace
 
     bool IsPortalStateVariable(uint32_t object)
     {
-        return IsVariable(object, GiantsStateVariable) && ValueName(object, GiantsStateVtable).starts_with(GiantsPortalStatePrefix);
+        return IsVariable(object, GiantsStateVariable) &&
+               ValueName(object, GiantsStateVtable).starts_with(GiantsPortalStatePrefix);
     }
 
     // Several state machines have a "current state name": the one whose state is a "Portal Control - ..." is this.
@@ -116,12 +120,14 @@ namespace
                     if (vars.state == 0)
                         vars.state = found.state;
                     if (PortalLogEnabled() && (found.error != 0 || found.state != 0))
-                        fprintf(stderr, "[toybox] portal prompt: script variables at %08X (message) and %08X (state)\n", vars.error, vars.state);
+                        fprintf(stderr, "[toybox] portal prompt: script variables at %08X (message) and %08X (state)\n",
+                            vars.error, vars.state);
                 }
                 std::string error = vars.error != 0 ? ValueName(vars.error, GiantsStringInfoVtable) : std::string();
                 std::string state = vars.state != 0 ? ValueName(vars.state, GiantsStateVtable) : std::string();
                 if (PortalLogEnabled() && (error != lastError || state != lastState))
-                    fprintf(stderr, "[toybox] portal prompt: state \"%s\", message \"%s\"\n", state.c_str(), error.c_str());
+                    fprintf(
+                        stderr, "[toybox] portal prompt: state \"%s\", message \"%s\"\n", state.c_str(), error.c_str());
                 lastError = error;
                 lastState = state;
                 Prompt prompt = ClassifyGiants(error, state);
@@ -145,23 +151,36 @@ namespace
     // A third atlas (1024x1024, hash 1F11BD3F9CB5136B) holds Wii buttons (A, B, Z, C, the nunchuk, +, -): never shown here.
     using glyphs::Cell;
     using glyphs::Glyph;
-    constexpr Cell SmallFontCells[] = { // 512x512
-        { Glyph::A, 3, 451, 44, 492 }, { Glyph::X, 48, 451, 89, 492 }, { Glyph::Y, 96, 451, 137, 492 },
-        { Glyph::B, 151, 451, 192, 492 }, { Glyph::LeftStickIcon, 367, 451, 411, 492 },
-        { Glyph::RightStickIcon, 457, 401, 501, 442 }, { Glyph::Start, 417, 457, 460, 486 }, { Glyph::Back, 464, 457, 507, 486 },
+    constexpr Cell SmallFontCells[] = {
+        // 512x512
+        { Glyph::A, 3, 451, 44, 492 },
+        { Glyph::X, 48, 451, 89, 492 },
+        { Glyph::Y, 96, 451, 137, 492 },
+        { Glyph::B, 151, 451, 192, 492 },
+        { Glyph::LeftStickIcon, 367, 451, 411, 492 },
+        { Glyph::RightStickIcon, 457, 401, 501, 442 },
+        { Glyph::Start, 417, 457, 460, 486 },
+        { Glyph::Back, 464, 457, 507, 486 },
     };
-    constexpr Cell LargeFontCells[] = { // 1024x1024
-        { Glyph::A, 31, 915, 114, 998 }, { Glyph::X, 118, 915, 201, 998 }, { Glyph::Y, 210, 915, 293, 998 },
-        { Glyph::B, 312, 915, 395, 998 }, { Glyph::LeftStickIcon, 722, 915, 809, 998 },
-        { Glyph::RightStickIcon, 722, 820, 809, 898 }, { Glyph::Start, 814, 927, 900, 986 }, { Glyph::Back, 903, 927, 989, 986 },
+    constexpr Cell LargeFontCells[] = {
+        // 1024x1024
+        { Glyph::A, 31, 915, 114, 998 },
+        { Glyph::X, 118, 915, 201, 998 },
+        { Glyph::Y, 210, 915, 293, 998 },
+        { Glyph::B, 312, 915, 395, 998 },
+        { Glyph::LeftStickIcon, 722, 915, 809, 998 },
+        { Glyph::RightStickIcon, 722, 820, 809, 898 },
+        { Glyph::Start, 814, 927, 900, 986 },
+        { Glyph::Back, 903, 927, 989, 986 },
     };
     constexpr glyphs::Texture GlyphTextures[] = {
         { 0xAD2E31ADEC576354ull, "font atlas 512", Glyph::A, SmallFontCells },
         { 0x462EB82E5F1D8851ull, "font atlas 1024", Glyph::A, LargeFontCells },
         { 0xF4C85169D542FC77ull, "a_button 64", Glyph::A, {}, true }, // 64x64 DXT5, a whole green A ("Press A to
-                                                                          // begin"), stored upside down
-        { 0xE88F26B298A077B7ull, "y_coin 64", Glyph::Y, {}, true }, // 64x64 DXT1, the gold Y coin of the dialogue button's
-                                                                   // model (ButtonIcons_wii_c), stored upside down
+        // begin"), stored upside down
+        { 0xE88F26B298A077B7ull, "y_coin 64", Glyph::Y, {},
+            true }, // 64x64 DXT1, the gold Y coin of the dialogue button's
+        // model (ButtonIcons_wii_c), stored upside down
         // The world prompts' coins (model ButtonIcons_HD_360, driven by UI_Controller_Prompt.ai: "press Y" above a rock to
         // smash with a Giant, in the first levels): 128x128 DXT1, stored upside down, in permanent\global.bld.
         { 0x6DE08CB96DD4DD23ull, "y_coin 128", Glyph::Y, {}, true },
@@ -181,15 +200,17 @@ namespace
         std::string lower(path);
         for (char& c : lower)
             c = char(tolower(static_cast<unsigned char>(c)));
-        if (!lower.starts_with(marker) || !lower.ends_with(extension) || lower.size() <= marker.size() + extension.size())
+        if (!lower.starts_with(marker) || !lower.ends_with(extension) ||
+            lower.size() <= marker.size() + extension.size())
             return {};
         std::string name = lower.substr(marker.size(), lower.size() - marker.size() - extension.size());
         return name.find('\\') == std::string::npos ? name : std::string();
     }
 
     // SKY_LEVEL: the first level is the tutorial, level\level_213_tutotial.arc and .bld (and that path alone).
-    const game::Adapter g_adapter = { g_gameInfo, ReadPortalPrompt, true, giants::SetVoiceLanguage, GlyphTextures, IntroMovies, true,
-        giants::SetTextLanguage, { "\\level\\level_213_tutotial", std::string_view("\0.", 2) }, {}, false, {}, nullptr, LevelOfFile };
+    const game::Adapter g_adapter = { g_gameInfo, ReadPortalPrompt, true, giants::SetVoiceLanguage, GlyphTextures,
+        IntroMovies, true, giants::SetTextLanguage, { "\\level\\level_213_tutotial", std::string_view("\0.", 2) }, {},
+        false, {}, nullptr, LevelOfFile };
 }
 
 const game::Adapter& game::Current() { return g_adapter; }
@@ -209,7 +230,8 @@ PPC_FUNC(GAME_HOOK(Ultrawide_CameraAspect))
 
     static std::atomic<bool> logged;
     if (!logged.exchange(true))
-        fprintf(stderr, "[ultrawide] camera aspect %.3f -> %.3f\n", g_memory.Read<float>(game::UltrawideDisplayAspect), ultrawide::Aspect());
+        fprintf(stderr, "[ultrawide] camera aspect %.3f -> %.3f\n", g_memory.Read<float>(game::UltrawideDisplayAspect),
+            ultrawide::Aspect());
     g_memory.Write<float>(game::UltrawideDisplayAspect, ultrawide::Aspect());
 }
 #endif
