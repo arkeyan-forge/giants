@@ -92,4 +92,6 @@ namespace game
     constexpr uint32_t UltrawideCompositeVertices = 4;
     constexpr int UltrawideCompositeSlot = 0;
     constexpr bool UltrawideCompositeVpos = false;
+    // The post pass whose constants and fetch offsets give its kernel in guest pixels: at scale N, in host pixels.
+    constexpr uint64_t HostKernelPixelShader = 0; // no such pass
 }
