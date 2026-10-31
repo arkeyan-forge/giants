@@ -210,7 +210,7 @@ namespace
     // SKY_LEVEL: the first level is the tutorial, level\level_213_tutotial.arc and .bld (and that path alone).
     const game::Adapter g_adapter = { g_gameInfo, ReadPortalPrompt, true, giants::SetVoiceLanguage, GlyphTextures,
         IntroMovies, true, giants::SetTextLanguage, { "\\level\\level_213_tutotial", std::string_view("\0.", 2) }, {},
-        false, {}, nullptr, LevelOfFile };
+        false, {}, nullptr, LevelOfFile, 60 };
 }
 
 const game::Adapter& game::Current() { return g_adapter; }
