@@ -14,7 +14,7 @@ movies and the smart portal; installs through Skylauncher with kit 0.5.0 (macOS)
 | `art.json` | the art manifest: which pictures of the disc the launcher and the Toy Box read |
 | `giants_portal_prompt.*` | where Giants keeps its portal screens (script variables) and how a message and a state classify (also built into `SSAPortalTest`) |
 | `config/` | XenonRecomp input: `Giants.toml`, `Giants_switch_tables.toml` |
-| `pipelines/baseline.zst` | the built-in pipeline list (1575 pipelines from the level tour) |
+| `pipelines/baseline.zst` | the built-in pipeline list (2363 pipelines from tours with several figures) |
 
 Build: `cmake -S . -B build-giants -G Ninja -DSSA_GAME=giants`. The generated code is `private/giants/ppc/` and the
 game's derived data `private/giants/`. The engine's hooks are in [`engines/alchemy/`](https://github.com/arkeyan-forge/forge/blob/main/engines/alchemy/README.md).

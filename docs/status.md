@@ -32,7 +32,7 @@ Feature by feature against SSA: [parity.md](parity.md); what is left: [100.md](1
 ## Open problems
 - The tour cannot start a challenge level the way the game does (with its base mesh and challenge session), so it does
   not test them; reaching them needs a save with the Heroic Challenges bought ([history.md](history.md), "Challenge levels in the tour").
-- Giants on a real Windows PC and a real Linux PC (the kits build and start it in tests: Wine, a container); an icon on Windows and Linux (none today, the macOS bundle has the game's own).
+- Giants on a real Windows PC and a real Linux PC (the kits build and start it in tests: Wine, a container); the Windows and Linux icons are implemented but need a real desktop check ([100.md](100.md)).
 - Player 2 works with scripted presses; a real second pad is untried ([figures.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/host/figures.md), "Player 2").
 - `XMsgStartIORequest(0xFB, 0x000B0006)` is refused, about 2 per second; the `SKY_D3D_CAPTURE` log prints
   Resolve/DrawIndexed arguments with SSA's layout ([boot.md](boot.md)).
