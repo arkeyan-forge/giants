@@ -10,3 +10,6 @@ toml=Giants.toml
 xex_sha256=12d1e29e4f07fbc559bc1a4988dd6bf346c3d16e30cbf862e2683e862f9fc09e
 # Shaders: all in one IGA archive of the disc (SkyBuild extracts them itself: tools/skybuild/igz_shaders.cpp).
 shaders=igz:/permanent/global.bld
+# The movie pass: the title's shaders come first, the first logo's later. Ending 8 s after the first one lost 5 of the 50 on
+# a Windows install: the picture was black (games/giants/docs/shaders.md).
+movie_shaders=50

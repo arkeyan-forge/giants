@@ -86,6 +86,8 @@ shader blob (its fields are patched: sizes, offsets, the constant table). That p
 ([history.md](history.md), "Installing Giants"). Not done: shipping the 50 as a recipe (it needs Bink's assembler, the
 `BinkOpen` path, understood).
 
+**The picture was black on Windows (found 2026-11-01, by the tester's report) [V]:** the pass ended 8 s after the first new shader, and Giants' first ones come with the title, 17 s before the logo's under Wine. The Windows kit's own SkyBuild, run under Wine, found 45 of the 50 and finished without an error. The 5 missing draw the final passes: that game shows a black picture with silhouettes and the button hints. `movie_shaders=50` in `game.txt` makes the pass wait for all of them, and `MoviePassDone` makes an update repair a short pass. Not seen on the Mac: there the logo starts within the 8 s.
+
 ### What SkyBuild does for Giants (C++, `tools/skybuild/igz_shaders.cpp`, no Python)
 1. Extract the XEX and translate the code (XenonRecomp), as for SSA.
 2. Read `/permanent/global.bld` (`shaders=igz:/permanent/global.bld` in `games/giants/game.txt`): 4394 containers, the
