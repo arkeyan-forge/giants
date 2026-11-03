@@ -17,7 +17,7 @@ The user's disc stays outside git (`private/discs/` or the path in `GIANTS_ISO`)
 Giants plays from the title to Chapter 1 and through the level tour (78 of 91 levels play to the end; the other 13 are
 challenge levels the tour starts without their set-up). Every toy type and variant the disc defines works (level 15,
 hats, LightCore, the smart portal, Player 2 with scripted presses). Bink 2 movies are drawn; ultrawide (Hor+), fps
-limit 30/60 and HD texture packs work; shaders come from the disc (SkyBuild); the baseline is 2363 pipelines. It
+limit 30/60 and HD texture packs work; shaders come from the disc (Arkeyan-Builder); the baseline is 2363 pipelines. It
 installs through Skylauncher (macOS tested). The dated entries, with the numbers: [history.md](history.md).
 Feature by feature against SSA: [parity.md](parity.md); what is left: [100.md](100.md).
 

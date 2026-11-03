@@ -58,7 +58,7 @@ has 251 (SSA's 218 and Giants' 33: [kernel_exports.md](https://github.com/arkeya
 
 - **Shaders:** Alchemy never calls `D3DDevice_Create*Shader`: it builds the shader object itself (IGZ data) and calls
   `D3DVertexShader_Init`/`D3DPixelShader_Init` (`sub_822FCF40`, r3 object, r4 microcode in physical memory): our
-  shader hook is on the two Init functions. The shaders are inside the compressed archives; SkyBuild now reads them
+  shader hook is on the two Init functions. The shaders are inside the compressed archives; Arkeyan-Builder now reads them
   from `/permanent/global.bld` ([shaders.md](shaders.md); the early "378 raw containers" were chance matches).
 - **Device layout:** aligning matched functions instruction by instruction, every device offset from ~0x2F58 up is
   **+0x80** in Giants (0x2F80→0x3000, 0x318C→0x320C, 0x3190→0x3210, 0x31A0→0x3220, 0x31E8→0x3268, 0x3260→0x32E0,

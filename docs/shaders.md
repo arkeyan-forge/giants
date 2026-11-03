@@ -2,7 +2,7 @@
 
 > **Purpose:** where Giants' shaders are on the disc, the Alchemy formats that hold them, and how the kit builds the cache · **Status:** current (2026-10-26) · **Tags:** [Alchemy] [Giants]
 
-Goal (done, kit 0.5.0): a player's SkyBuild builds the Giants shader cache from the disc alone, with no `SKY_DUMP_SHADERS` run through the
+Goal (done, kit 0.5.0): a player's Arkeyan-Builder builds the Giants shader cache from the disc alone, with no `SKY_DUMP_SHADERS` run through the
 game. Tool: `tools/shaders/giants_extract.py` (Python standard library only, `python3 -I`). Everything it writes goes
 to `private/` (derived from the disc, never committed).
 
@@ -18,7 +18,7 @@ pixel). None of the other 890 archives (`.arc` and `.bld`, levels, characters, m
 Not on the disc: 50 containers that Bink 2 builds when it opens a movie (see "Bink" below).
 
 ### Format facts [Alchemy] [V] (reverse-engineered from the disc)
-The engine's formats, cited by `runtime/host/art/alchemy_archive.*` and `tools/skybuild/igz_shaders.*`.
+The engine's formats, cited by `runtime/host/art/alchemy_archive.*` and `tools/arkeyan-builder/igz_shaders.*`.
 
 #### IGA v8 (little-endian), the `.arc` and `.bld` files
 ```
@@ -32,8 +32,8 @@ The engine's formats, cited by `runtime/host/art/alchemy_archive.*` and `tools/s
   rest of the file). The archive also has a chunk table after the entries (offsets in 0x100 units, bit 15 or 31 =
   compressed); reading chunks one after the other makes it unnecessary.
 - The name table (`u32 offsets[n]`, then NUL-terminated source paths; [art.md](art.md#iga-v8-name-table)) is not needed
-  here: shaders are found by content. The reader (IGA, LZMA) is `runtime/host/art/alchemy_archive.cpp`, shared by SkyBuild
-  (`tools/skybuild/igz_shaders.cpp`), the game and Skylauncher.
+  here: shaders are found by content. The reader (IGA, LZMA) is `runtime/host/art/alchemy_archive.cpp`, shared by Arkeyan-Builder
+  (`tools/arkeyan-builder/igz_shaders.cpp`), the game and Skylauncher.
 
 #### IGZ v6 (big-endian), the objects inside
 ```
@@ -81,14 +81,14 @@ level archive: the global archive is the only source, and it is loaded at boot.
 Bink 2 builds its movie shaders in code: the 0x20-byte-aligned microcode is in `default.xex` (all 50 physical parts are
 found whole in the loaded image), but the virtual part is a D3D header assembled at run time from a compiled-in Microsoft
 shader blob (its fields are patched: sizes, offsets, the constant table). That part is not a byte string of the image.
-**Done: the short run** (as for SSA's Bink shaders): after SkyBuild builds the game, it runs it headless with
+**Done: the short run** (as for SSA's Bink shaders): after Arkeyan-Builder builds the game, it runs it headless with
 `SKY_DUMP_SHADERS=<dir>` until the first Bink logo opens (9 s), rebuilds the cache with the 50 and relinks
 ([history.md](history.md), "Installing Giants"). Not done: shipping the 50 as a recipe (it needs Bink's assembler, the
 `BinkOpen` path, understood).
 
-**The picture was black on Windows (found 2026-11-01, by the tester's report) [V]:** the pass ended 8 s after the first new shader, and Giants' first ones come with the title, 17 s before the logo's under Wine. The Windows kit's own SkyBuild, run under Wine, found 45 of the 50 and finished without an error. The 5 missing draw the final passes: that game shows a black picture with silhouettes and the button hints. `movie_shaders=50` in `game.txt` makes the pass wait for all of them, and `MoviePassDone` makes an update repair a short pass. Not seen on the Mac: there the logo starts within the 8 s.
+**The picture was black on Windows (found 2026-11-01, by the tester's report) [V]:** the pass ended 8 s after the first new shader, and Giants' first ones come with the title, 17 s before the logo's under Wine. The Windows kit's own Arkeyan-Builder, run under Wine, found 45 of the 50 and finished without an error. The 5 missing draw the final passes: that game shows a black picture with silhouettes and the button hints. `movie_shaders=50` in `game.txt` makes the pass wait for all of them, and `MoviePassDone` makes an update repair a short pass. Not seen on the Mac: there the logo starts within the 8 s.
 
-### What SkyBuild does for Giants (C++, `tools/skybuild/igz_shaders.cpp`, no Python)
+### What Arkeyan-Builder does for Giants (C++, `tools/arkeyan-builder/igz_shaders.cpp`, no Python)
 1. Extract the XEX and translate the code (XenonRecomp), as for SSA.
 2. Read `/permanent/global.bld` (`shaders=igz:/permanent/global.bld` in `games/giants/game.txt`): 4394 containers, the
    same as `giants_extract.py`, in under a second (the Python tool takes 48 s for the whole disc, 2 s for that file).
@@ -124,6 +124,14 @@ headless run (the Bink 2 shaders) never reaches that scene, so the kit's cache l
 draw; adding the tutorial's first seconds to the install run (or this shader's container to the kit) is the next step [?].
 
 ## Is it engine-generic?
+The explicit-LOD/cube translator update (2026-11-01) found neither feature in the 4394 locally available Giants disc
+containers: all their translated HLSL stays byte-identical. Still rebuild locally with the updated kit (launcher game
+update/rebuild), or rerun the developer cache recipe, configure and relink; Arkeyan-Builder's stamp hashes the translator
+binary, and compiled entries hash translated text. It ships in 0.8.0 (Giants 0.8.5, 0.7.2 had 0.8.4), so
+the launcher offers the update and the rebuild follows.
+Preserve the runtime/movie containers when rebuilding, check the usual scene, shadows and movie at scales 1 and 2,
+and keep all cache data on the player's machine. [Translation proof](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/gpu/shaders.md).
+
 Swap Force and the later Alchemy games:
 Probably the method, not the bytes:
 - The **IGA** container changes (Swap Force v10 big-endian, Trap Team and later v11): header offsets, entry size and the

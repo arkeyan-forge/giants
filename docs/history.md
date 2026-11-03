@@ -17,7 +17,7 @@
 - **Voice language** (2026-10-26): the voices in any of the disc's 12 languages, whatever the text's (`voice_language`;
   [boot.md](boot.md#voice-language)).
 - **Pipelines**: a 2363-pipeline baseline from tours with several figures (2026-10-27; was 1575 from one SSA figure), compiled during the loading screens.
-- **Shaders** come from the disc, no dump: SkyBuild extracts all 4394 from `/permanent/global.bld`; a short run at
+- **Shaders** come from the disc, no dump: Arkeyan-Builder extracts all 4394 from `/permanent/global.bld`; a short run at
   install adds Bink 2's 50 ([shaders.md](shaders.md)).
 - **Installs through Skylauncher** with kit 0.5.0 (macOS tested; "Installing Giants" below).
 - Feature by feature against SSA: [parity.md](parity.md); what is left: [100.md](100.md).
@@ -75,11 +75,11 @@ definitions (`Init_Setup.bld`) are the check, and the catalogue matches them (`t
 
 ## Installing Giants through Skylauncher (2026-10-25, kit 0.5.0) [Giants]
 A player drops the Giants disc, presses INSTALL, then PLAY, as for SSA. Design and contract: [kit contract](https://github.com/arkeyan-forge/forge/blob/main/docs/release/launcher/kit_contract.md) ("Several games in one kit").
-- **Disc detection**: SkyBuild hashes `default.xex` (`12d1e29e...`) against `games/giants/game.txt` (the same hash as `info.cpp`; `make_kit.sh` checks that). Another disc: `@error` naming the SHA-256 and the supported games.
+- **Disc detection**: Arkeyan-Builder hashes `default.xex` (`12d1e29e...`) against `games/giants/game.txt` (the same hash as `info.cpp`; `make_kit.sh` checks that). Another disc: `@error` naming the SHA-256 and the supported games.
 - **Code**: `games/giants/config/Giants.toml` now uses the kit layout (`../private/default.xex`, `../ppc`). XenonRecomp gives the same `ppc_context.h` as for SSA; `ppc_config.h` differs (memory layout), so the kit holds one runtime per game (`lib/giants/runtime`, `commands/giants/`), `kit.txt` has `ppc_config_sha256.giants`.
-- **Shaders**: SkyBuild extracts them itself (`tools/skybuild/igz_shaders.cpp`: IGA v8, a small LZMA decoder, IGZ v6 scan; no Python): 4394 containers (264 vertex, 4130 pixel), the same count as `giants_extract.py`, in under a second. Then XenosRecomp, then the short headless run that dumps Bink 2's **50** shaders (9 s), the cache is rebuilt (4443 in the game: 4394 + 50 - 1 duplicate) and the game relinked.
+- **Shaders**: Arkeyan-Builder extracts them itself (`tools/arkeyan-builder/igz_shaders.cpp`: IGA v8, a small LZMA decoder, IGZ v6 scan; no Python): 4394 containers (264 vertex, 4130 pixel), the same count as `giants_extract.py`, in under a second. Then XenosRecomp, then the short headless run that dumps Bink 2's **50** shaders (9 s), the cache is rebuilt (4443 in the game: 4394 + 50 - 1 duplicate) and the game relinked.
 - **Names**: `SGRecomp` (`SGRecomp.app`, `SGRecomp.exe`); the log stays `SSARecomp.log` in `Skylanders/Giants/`. The CMake target is still `SSARecomp`: a `-DSSA_GAME=giants` build gives `build-giants/SSARecomp/SGRecomp(.app)`.
-- **Timing, M-series Mac, `--jobs 6`, kit 0.5.0** (SkyBuild's `timing` log lines): toolchain 0 s, disc 0 s (extraction included), recompile 2 s, shaders 445 s, compile 37 s, link 0 s, movies 9 s, shaders again 462 s, compile 28 s, link 0 s: **986 s (16.4 min)**. The shader translation was 95 % of it and ran twice (the second run re-translated all 4443 for 50 new ones).
+- **Timing, M-series Mac, `--jobs 6`, kit 0.5.0** (Arkeyan-Builder's `timing` log lines): toolchain 0 s, disc 0 s (extraction included), recompile 2 s, shaders 445 s, compile 37 s, link 0 s, movies 9 s, shaders again 462 s, compile 28 s, link 0 s: **986 s (16.4 min)**. The shader translation was 95 % of it and ran twice (the second run re-translated all 4443 for 50 new ones).
   - **After the install-time work** (the install-time work, same Mac, same kit, the machine shared with other jobs, load average 10-70 on 8 cores, `--jobs 6`): before **977 s**, after **563 s**. Shaders 446 s then 450 s become 427 s then **56 s** (the second pass reloads 4443 translated shaders from `shaders/cache` and compiles the new ones). The first pass is bound by the Metal compiler (about 0.35 s of CPU per shader, 85 % of the translation), so it only drops on a quieter machine. Output: 4443 shaders compared, 0 differences (`tools/shaders/compare_cache.py`).
   - SSA, same conditions: 315 s before, 193 s after (shaders 100 s then 9 s).
   - The launcher shows `@progress` during both shader steps.

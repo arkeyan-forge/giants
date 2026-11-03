@@ -10,7 +10,7 @@ movies and the smart portal; installs through Skylauncher with kit 0.5.0 (macOS)
 | `addresses.h` | the guest functions to hook (`GAME_HOOK_<Name>`: D3D, XMA, ultrawide, Bink) and the guest data it reads; a missing line is "unknown" |
 | `adapter.cpp` | the `game::Adapter` (`runtime/game.h`): the portal prompt (a watcher thread finds the game script's variables), the camera aspect, the intro movies |
 | `info.cpp` | id, name and the supported disc release (SHA-256 of `default.xex`) |
-| `game.txt` | what the player kit's SkyBuild knows about the game (runtime `SGRecomp`, config, `default.xex` hash, shaders from `/permanent/global.bld`) |
+| `game.txt` | what the player kit's Arkeyan-Builder knows about the game (runtime `Skylanders Giants`, config, `default.xex` hash, shaders from `/permanent/global.bld`) |
 | `art.json` | the art manifest: which pictures of the disc the launcher and the Toy Box read |
 | `giants_portal_prompt.*` | where Giants keeps its portal screens (script variables) and how a message and a state classify (also built into `SSAPortalTest`) |
 | `config/` | XenonRecomp input: `Giants.toml`, `Giants_switch_tables.toml` |

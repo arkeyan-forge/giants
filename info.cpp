@@ -12,4 +12,4 @@ namespace
     };
 }
 
-extern const GameInfo g_gameInfo = { "giants", "Skylanders: Giants", GiantsReleases, "SGRecomp" };
+extern const GameInfo g_gameInfo = { "giants", "Skylanders Giants", GiantsReleases, "Skylanders Giants" };

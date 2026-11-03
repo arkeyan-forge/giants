@@ -9,7 +9,6 @@
 #include "host/portal.h"
 #include "memory.h"
 #include <atomic>
-#include <cctype>
 #include <chrono>
 #include <cstdio>
 #include <cstring>
@@ -193,24 +192,29 @@ namespace
     // The two start-up logos (\movies\atvinewlogo_640.mov, \movies\tfb_logo_640x456.mov); the story movies are fmv01..12.
     constexpr std::string_view IntroMovies[] = { "atvinewlogo_640", "tfb_logo_640x456" };
 
-    // The level a file starts: \level\<name>.arc (the title screen's is one too).
-    std::string LevelOfFile(std::string_view path)
-    {
-        constexpr std::string_view marker = "\\level\\", extension = ".arc";
-        std::string lower(path);
-        for (char& c : lower)
-            c = char(tolower(static_cast<unsigned char>(c)));
-        if (!lower.starts_with(marker) || !lower.ends_with(extension) ||
-            lower.size() <= marker.size() + extension.size())
-            return {};
-        std::string name = lower.substr(marker.size(), lower.size() - marker.size() - extension.size());
-        return name.find('\\') == std::string::npos ? name : std::string();
-    }
+    // The F3 menu's Commands page (host/commands.h): Skylauncher's rows for this game, in its order and words.
+    constexpr commands::Row InputRows[] = {
+        { "left_up", "Move up", "Haut", nullptr },
+        { "left_down", "Move down", "Bas", nullptr },
+        { "left_left", "Move left", "Gauche", nullptr },
+        { "left_right", "Move right", "Droite", nullptr },
+        { "a", "Attack 1 / Accept", "Attaque 1 / Accepter", "a" },
+        { "x", "Attack 2", "Attaque 2", "x" },
+        { "y", "Action", "Action", "y" },
+        { "b", "Attack 3 / Back", "Attaque 3 / Retour", "b" },
+        { "back", "Skylander Info", "Infos du Skylander", "back" },
+        { "start", "Pause", "Pause", "start" },
+    };
+
+    // The mouse once on: attack 1 on the left button, attack 2 on the right (Skylauncher's rows name them so).
+    constexpr mouse::Default MouseDefaults[] = { { "a", mouse::Left }, { "x", mouse::Right } };
+    // The front end: the game's own menus, where the mouse does nothing.
+    constexpr std::string_view MenuLevels[] = { "title" };
 
     // SKY_LEVEL: the first level is the tutorial, level\level_213_tutotial.arc and .bld (and that path alone).
     const game::Adapter g_adapter = { g_gameInfo, ReadPortalPrompt, true, giants::SetVoiceLanguage, GlyphTextures,
         IntroMovies, true, giants::SetTextLanguage, { "\\level\\level_213_tutotial", std::string_view("\0.", 2) }, {},
-        false, {}, nullptr, LevelOfFile, 60 };
+        false, {}, nullptr, game::LevelArcOfFile, 60, {}, InputRows, MouseDefaults, MenuLevels };
 }
 
 const game::Adapter& game::Current() { return g_adapter; }

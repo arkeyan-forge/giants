@@ -8,8 +8,8 @@ the same way. Legend (every game): ✅ done, 🔧 in progress, ⏸ paused, ❌ n
 ## Skylauncher
 | Feature | SSA | Giants | Where documented |
 |---|---|---|---|
-| Disc check | `GameRelease` rows (the `default.xex` SHA-256) | ✅ `games/giants/info.cpp` and `game.txt`; SkyBuild picks the game from the disc | [kit_contract.md](https://github.com/arkeyan-forge/forge/blob/main/docs/release/launcher/kit_contract.md) ("Several games in one kit") |
-| INSTALL, update, PLAY through the kit | the kit + SkyBuild | ✅ macOS (kit 0.5.0, 563 s install); ✅ the Windows and Linux kits built, tested under Wine and in Docker; ❌ a real PC | [history.md](history.md) ("Installing Giants") |
+| Disc check | `GameRelease` rows (the `default.xex` SHA-256) | ✅ `games/giants/info.cpp` and `game.txt`; Arkeyan-Builder picks the game from the disc | [kit_contract.md](https://github.com/arkeyan-forge/forge/blob/main/docs/release/launcher/kit_contract.md) ("Several games in one kit") |
+| INSTALL, update, PLAY through the kit | the kit + Arkeyan-Builder | ✅ macOS (kit 0.5.0, 563 s install); ✅ the Windows and Linux kits built, tested under Wine and in Docker; ❌ a real PC | [history.md](history.md) ("Installing Giants") |
 | Game page art from the player's disc | `art::Extract`: the logo and the painted sky of `uiimage.str`, the XDBF title icon, cached in `<data>/<Game>/launcher-cache/` | ✅ the logo composed from `Title.bld`'s sprite sheet, the main menu's painting from `global.arc`, the title icon | [art.md](art.md), [game_art.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/host/game_art.md) |
 | The game's look in the launcher | `GameStyle` in Skylauncher's theme: the logo's sky blue, soft stone bevels | ✅ the menus' glossy gel buttons in the logo's gold and orange | Skylauncher's `launcher_ui.md` ("Each game's look") |
 | The collection: catalogue, figure page, create, delete, trash, backups | the shared collection library, `catalogue.json` ("accepts" per game) | ✅ the Giants toys, their seats and accepts lists | [collection.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/host/collection.md), [figures.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/host/figures.md) |
@@ -20,7 +20,7 @@ the same way. Legend (every game): ✅ done, 🔧 in progress, ⏸ paused, ❌ n
 | Settings: video (scale, widescreen, HD textures, intro movies) | generic keys and the SSA hooks | ✅ intro skip (`BinkOpen`), widescreen and ultrawide, HD textures | [bink.md](https://github.com/arkeyan-forge/forge/blob/main/docs/engines/lux/bink.md), [ultrawide.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/gpu/ultrawide.md) |
 | Save backups and restore | generic, per game folder | ✅ generic; ❌ verified on Giants' saves | [settings.md](https://github.com/arkeyan-forge/forge/blob/main/docs/getting-started/settings.md) ("Saves and their backups") |
 | Report a problem | generic | ✅ | Skylauncher's `support.md` |
-| The app's icon | the neutral disc (`SSARecomp.icns`), replaced at install by the game's XDBF icon | ✅ macOS: the game's own icon from the disc at install; ❌ Windows and Linux have no icon | [game_art.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/host/game_art.md) ("The app icon") |
+| The app's icon | the neutral disc (`ArkeyanRuntime.icns`), replaced at install by the game's XDBF icon | ✅ macOS: the game's own icon from the disc at install; ❌ Windows and Linux have no icon | [game_art.md](https://github.com/arkeyan-forge/forge/blob/main/docs/runtime/host/game_art.md) ("The app icon") |
 
 ## Runtime (in game)
 | Feature | SSA | Giants | Where documented |

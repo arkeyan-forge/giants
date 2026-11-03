@@ -1,14 +1,14 @@
-# What the player kit's SkyBuild knows about this game (tools/make_kit.sh copies it to config/giants/game.txt). No game data:
+# What the player kit's Arkeyan-Builder knows about this game (tools/make_kit.sh copies it to config/giants/game.txt). No game data:
 # the hashes identify the player's own default.xex and must be the ones games/giants/info.cpp accepts.
 id=giants
-name=Skylanders: Giants
-runtime=SGRecomp
+name=Skylanders Giants
+runtime=Skylanders Giants
 # The game's own version (1.0 = the game at 100 %): each fix bumps the last number. The kit carries it (kit.txt game_version.<id>),
 # the release says it (games.json), Skylauncher offers UPDATE when its release has a higher one.
 version=0.8.5
 toml=Giants.toml
 xex_sha256=12d1e29e4f07fbc559bc1a4988dd6bf346c3d16e30cbf862e2683e862f9fc09e
-# Shaders: all in one IGA archive of the disc (SkyBuild extracts them itself: tools/skybuild/igz_shaders.cpp).
+# Shaders: all in one IGA archive of the disc (Arkeyan-Builder extracts them itself: tools/arkeyan-builder/igz_shaders.cpp).
 shaders=igz:/permanent/global.bld
 # The movie pass: the title's shaders come first, the first logo's later. Ending 8 s after the first one lost 5 of the 50 on
 # a Windows install: the picture was black (games/giants/docs/shaders.md).
