@@ -11,19 +11,12 @@ switch_table_file_path = "Giants_switch_tables.toml"
 
 skip_lr = false
 skip_msr = false
-ctr_as_local = true
-xer_as_local = true
-reserved_as_local = true
-cr_as_local = true
-non_argument_as_local = true
-non_volatile_as_local = true
-# Functions XenonRecomp keeps in the context (every register a PPCContext field): they read a register their caller
-# set outside the ABI. Written by tools/xenonrecomp/local_reads.py --toml (docs/tools/toolchain/xenonrecomp.md).
-context_functions = [
-    0x82169318, 0x822CDDA0, 0x822CE418, 0x822CE570, 0x822CEEA8, 0x8240A834, 0x8240AD00, 0x8240B090,
-    0x824544B0, 0x82456160, 0x82456920, 0x82461180, 0x824B1EF8, 0x8257A228, 0x825D18C8, 0x825E00C4,
-    0x825E6978, 0x825EB320, 0x825EB5C4, 0x82608880,
-]
+ctr_as_local = false
+xer_as_local = false
+reserved_as_local = false
+cr_as_local = false
+non_argument_as_local = false
+non_volatile_as_local = false
 
 restgprlr_14_address = 0x825DF9F0
 savegprlr_14_address = 0x825DF9A0
