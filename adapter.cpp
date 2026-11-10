@@ -219,6 +219,9 @@ namespace
 
 const game::Adapter& game::Current() { return g_adapter; }
 
+// Skylauncher's glow for this game (its StyleOf).
+uint32_t game::Accent() { return 0xFFB43A; }
+
 // Ultrawide, the camera: sub_8219B900 reads the video mode, keeps the UI's screen size (1280x720, floats at +180/+184 of
 // the display object) and stores the display's aspect (game::UltrawideDisplayAspect). Every camera reads it there when
 // it builds its projection (sub_82198DB0 each frame for the level's cameras, sub_8218E2A8, the projection helpers

@@ -126,7 +126,7 @@ files in `<data>/Giants/` (`launcher-cache/`, `portraits/`): [game_art.md](https
 The catalogue maps toys to pictures (`portraits`). Nothing it writes is shipped.
 
 ## Tests
-`SSAArtTest` (`runtime/host/art/art_test.cpp`): the readers on synthetic fixtures, and with `GIANTS_ISO` the whole
+`ArkeyanArtTest` (`runtime/host/art/art_test.cpp`): the readers on synthetic fixtures, and with `GIANTS_ISO` the whole
 extraction: logo 1033x541 (`TestGiantsLogo`: size and aspect, alpha coverage 0.75..0.9, the plate's blue, the medallion row's span, the TM, transparent corners), background 1600x960, title icon, 123 portraits, 99 artworks, in 9.7 s on an M1 Pro (1.8 s without the artworks; 0.0 s once cached).
 
 ## Is it engine-generic?

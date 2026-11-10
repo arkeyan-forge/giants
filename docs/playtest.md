@@ -6,7 +6,7 @@ The goal: play Giants from start to end on our port and report every problem. Au
 every level for 80 s (the tour); playing through needs a person.
 
 ## Before
-- Use the latest build: Skylauncher with Giants (kit 0.5.0), or a build of this repo (`cmake -S . -B build-giants -G Ninja -DSSA_GAME=giants`).
+- Use the latest build: Skylauncher with Giants (kit 0.5.0), or a build of this repo (`cmake -S . -B build-giants -G Ninja -DARKEYAN_GAME=giants`).
 - Note your machine: OS, CPU, GPU, screen size and scale, gamepad or keyboard, real portal (which one) or the emulated
   portal (Toy Box).
 - Known open issues, so you need not report them: [status.md](status.md) ("Open problems"). Do report a movie whose

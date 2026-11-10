@@ -94,7 +94,7 @@ what stood in the way:
 3. **Shaders:** the hooks on `D3DVertexShader_Init`/`D3DPixelShader_Init` dump 4338 containers (`SKY_DUMP_SHADERS`);
    Alchemy strips their constant tables, so XenosRecomp now makes one up (float4 array `g_C`, samplers and booleans
    0-15): 4337 of 4338 translate (1 uses a 1D texture Metal has no heap for). SSA: 1118. The cache was then built
-   from that dump (`SSA_GAME=giants tools/shaders/build_cache.sh <disc> <dump dir>`, ~15 min on an M1 Pro); since
+   from that dump (`SKY_GAME=giants tools/shaders/build_cache.sh <disc> <dump dir>`, ~15 min on an M1 Pro); since
    2026-10-25 it comes from the disc ([shaders.md](shaders.md)). [Alchemy]
 4. **0 draws**: the draws ran but `PrepareVertices` found no vertex declaration (offset 0x2FD0, above). [Giants] [XDK]
 5. **3 indices per draw**: `DrawIndexedVertices` lost its base-vertex argument in XDK 21076:
@@ -119,7 +119,7 @@ emulated portal), music and voices playing, 60 fps. In order:
    ERROR_PATH_NOT_FOUND (as Xenia); `XamContentClose` of a root that is not open gives ERROR_FILE_NOT_FOUND. Found by
    reading the save state machine: `sub_8226C800` (open request), `sub_8226C9E8` (completion: an error is state 8,
    "create", only when the request may create; else 0x11, "damaged"), `sub_8226D498` (Win32 error -> state).
-   Saves go to the game's own data folder (`SSA_GAME_ID`).
+   Saves go to the game's own data folder (`ARKEYAN_GAME_ID`).
 2. **Deadlock after the opening movie** [Xbox]: with no XMA hooks, engine 2's voice code (`sub_823CD288`) waited
    forever for a context lock inside a critical section the main thread then waited for. The XMA hooks above fixed it
    and the sound with it. Diagnosed with `sample <pid>` (host stacks show the `__imp__sub_` frames).
