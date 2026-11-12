@@ -1,3 +1,5 @@
+> **This repository is archived.** Its content now lives in [arkeyan-forge/forge](https://github.com/arkeyan-forge/forge) (one repository for the whole project, since 2026-11-12).
+
 # games/giants/: Skylanders: Giants (Alchemy engine)
 
 > **Purpose:** what is in Giants' game folder, how to build it, and where its docs are · **Status:** current (2026-10-26) · **Tags:** [Giants] [Alchemy]
